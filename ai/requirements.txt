@@ -1,0 +1,10 @@
+qdrant-client
+pandas
+numpy
+sentence-transformers
+clip
+torch
+uuid
+git+https://github.com/openai/CLIP.git
+python-dotenv
+tqdm

@@ -1,0 +1,5 @@
+.env
+ai/resources/datasets/
+ai/datasets/
+*.csv
+*.tsv
