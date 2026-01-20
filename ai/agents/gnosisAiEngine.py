@@ -2,6 +2,7 @@ from ai.services.vectors import getVector
 from ai.agents.explainer import explain
 from ai.utils.confidenceScore import getConfidenceScore
 from ai.agents.queryTransformer import transformQuery
+from ai.agents.evidence import getEvidence
 import json
 
 def invokeEngine(data):
@@ -12,14 +13,18 @@ def invokeEngine(data):
         
     print(f"\n\n {vectors} \n\n")
     
-    result = explain(vectors)
+    summary = explain(vectors)
     confidence = getConfidenceScore(vectors)
     
-    print(json.dumps(result, indent=2, ensure_ascii=False))
+    # print(json.dumps(summary, indent=2, ensure_ascii=False))
+    
+    evidence = getEvidence(query)
     
     return {
+        "final_verdict": vectors["final_verdict"],
         "confidence_score": confidence,
-        "explanation": result,
+        "summary": summary,
+        "evidence": evidence
     }
 
-print(invokeEngine("can remdesivir treat people with covid-19?"))
+print(invokeEngine("did rahul gandhi become prime minister of india in 2024?"))
