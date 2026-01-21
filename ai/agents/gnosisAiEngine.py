@@ -1,12 +1,15 @@
 from ai.services.vectors import getVector  
-from ai.agents.explainer import explain
+from ai.services.images import getImages
+
 from ai.utils.confidenceScore import getConfidenceScore
-from ai.agents.queryTransformer import transformQuery
-from ai.agents.evidence import getEvidence
 from ai.utils.vectorSort import sortVectors
+
+from ai.agents.queryTransformer import transformQuery
+from ai.agents.explainer import explain
+from ai.agents.evidence import getEvidence
 from ai.agents.impacter import getFutureImpacts
 
-def invokeEngine(data):
+def invokeEngine(data):    
     query = transformQuery(data)
     print(f"\n\n New Query: {query} \n\n")
     
@@ -22,6 +25,7 @@ def invokeEngine(data):
     evidence = getEvidence(query)
     sortedVector = sortVectors(evidence)
     impacts = getFutureImpacts(evidence)
+    images = getImages(query)
     
     return {
         "final_verdict": vectors["final_verdict"],
@@ -30,7 +34,8 @@ def invokeEngine(data):
         "evidence": evidence,
         "video_url": vectors["video"]["items"][0]["url"],
         "track": sortedVector,
-        "impacts": impacts
+        "impacts": impacts,
+        "images": images
     }
 
-print(invokeEngine("Did sonu sood scammed indian people during covid 19 campaign by taking all the money by himself???"))
+print(invokeEngine("is it true that sonu sood took all the campaign money and gave a really small portion of it?"))
