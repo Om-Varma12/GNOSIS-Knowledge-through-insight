@@ -11,7 +11,7 @@ def invokeEngine(data):
     
     vectors = getVector(query)
         
-    print(f"\n\n {vectors} \n\n")
+    # print(f"\n\n {vectors} \n\n")
     
     summary = explain(vectors)
     confidence = getConfidenceScore(vectors)
@@ -27,4 +27,4 @@ def invokeEngine(data):
         "evidence": evidence
     }
 
-print(invokeEngine("did rahul gandhi become prime minister of india in 2024?"))
+print(invokeEngine("indian boy Ashwamit Gautam got arrested"))

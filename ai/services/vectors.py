@@ -29,14 +29,15 @@ def getVector(data):
         vec = model.encode_text(tokens).cpu().numpy()[0]
 
     # Search
-    result = client.query_points(
+    result = client.search(
         collection_name="GNOSIS",
-        query=vec.tolist(),
+        query_vector=("text", vec.tolist()),
         limit=5,
         with_payload=True
     )
 
-    hits = result.points
+
+    hits = result
 
     summary = {
         "fake": {"count": 0, "items": []},

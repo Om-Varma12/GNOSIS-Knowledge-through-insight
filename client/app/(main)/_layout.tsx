@@ -5,6 +5,8 @@ import Octicons from '@expo/vector-icons/Octicons';
 import { useState } from 'react';
 import { useChatStore } from '@/store/chatStore';
 import HistorySidebar from './history/history';
+import api from "@/app/api/api";
+
 
 export default function MainLayout() {
 
@@ -12,27 +14,39 @@ export default function MainLayout() {
   const [showHistory, setShowHistory] = useState(false);
   const addMessage = useChatStore((s) => s.addMessage);
 
-
-  const HandleSendPress = () =>{
+  const HandleSendPress = async () => {
     if (!input.trim()) return;
 
-    // User message
+    const userMessage = input;
+
+    // Add user message immediately
     addMessage({
       id: Date.now().toString(),
-      role: 'user',
-      text: input,
+      role: "user",
+      text: userMessage,
     });
 
-    // AI echo message (temporary)
-    addMessage({
-      id: (Date.now() + 1).toString(),
-      role: 'ai',
-      text: input,
-    });
+    setInput("");
 
-    setInput('');
+    try {
+      const response = await api.post("/chat", {
+        message: userMessage,
+      });
+
+      addMessage({
+        id: (Date.now() + 1).toString(),
+        role: "ai",
+        text: response.data.reply,
+      });
+
+    } catch (error) {
+      addMessage({
+        id: (Date.now() + 1).toString(),
+        role: "ai",
+        text: "Something went wrong. Please try again.",
+      });
+    }
   };
-
 
   return (
      <SafeAreaView style={styles.container}>
