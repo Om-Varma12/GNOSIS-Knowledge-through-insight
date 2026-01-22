@@ -14,12 +14,14 @@ You MUST return STRICT JSON in this format:
   "evidence_1": {
     "evidenceTitle": "...",
     "summary": "...",
-    "url": "..."
+    "url": "...",
+    "date": "..."
   },
   "evidence_2": {
     "evidenceTitle": "...",
     "summary": "...",
-    "url": "..."
+    "url": "...",
+    "date": "..."
   }
 }
 

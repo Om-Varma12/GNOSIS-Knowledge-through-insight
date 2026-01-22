@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1.routes import temp, chat
+from server.app.api.v1.routes import temp, chat
 
 api_router = APIRouter(prefix="/api/v1")
 

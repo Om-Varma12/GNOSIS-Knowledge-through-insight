@@ -1,71 +1,84 @@
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Slot } from 'expo-router';
 import Octicons from '@expo/vector-icons/Octicons';
 import { useState } from 'react';
 import { useChatStore } from '@/store/chatStore';
-import HistorySidebar from './history/history';
+// import HistorySidebar from './history/history';
 import api from "@/app/api/api";
 
-
 export default function MainLayout() {
-
   const [input, setInput] = useState('');
-  const [showHistory, setShowHistory] = useState(false);
+  // const [showHistory, setShowHistory] = useState(false);
+
   const addMessage = useChatStore((s) => s.addMessage);
+  const replaceMessage = useChatStore((s) => s.replaceMessage);
 
   const HandleSendPress = async () => {
     if (!input.trim()) return;
 
     const userMessage = input;
+    setInput("");
 
-    // Add user message immediately
     addMessage({
       id: Date.now().toString(),
       role: "user",
       text: userMessage,
     });
 
-    setInput("");
+    const loadingId = (Date.now() + 1).toString();
+
+    addMessage({
+      id: loadingId,
+      role: "ai",
+      text: "Analyzing claim… This may take a moment.",
+      loading: true,
+    });
 
     try {
       const response = await api.post("/chat", {
         message: userMessage,
       });
 
-      addMessage({
-        id: (Date.now() + 1).toString(),
+      replaceMessage(loadingId, {
+        id: loadingId,
         role: "ai",
-        text: response.data.reply,
+        text: response.data.summary ?? "Analysis completed.",
+        data: response.data,
+        loading: false,
       });
 
     } catch (error) {
-      addMessage({
-        id: (Date.now() + 1).toString(),
+      console.log("CHAT ERROR:", error);
+
+      replaceMessage(loadingId, {
+        id: loadingId,
         role: "ai",
-        text: "Something went wrong. Please try again.",
+        text: "We couldn’t complete the analysis right now. Please try again.",
+        loading: false,
       });
     }
   };
 
   return (
-     <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
 
       {/* Top Bar */}
-      <View style={styles.topContainer}>
+      {/* <View style={styles.topContainer}>
         <TouchableOpacity
           style={styles.iconButton}
           onPress={() => setShowHistory(true)}
         >
           <Octicons name="history" size={22} color="white" />
         </TouchableOpacity>
-      </View>
-       <HistorySidebar
+      </View> */}
+
+      {/* <HistorySidebar
         visible={showHistory}
         onClose={() => setShowHistory(false)}
-      />
+      /> */}
 
-        <Slot />
+      <Slot />
 
       {/* Bottom Input Bar */}
       <View style={styles.bottomContainer}>
@@ -82,7 +95,10 @@ export default function MainLayout() {
           multiline
         />
 
-        <TouchableOpacity style={styles.sendButton} onPress={HandleSendPress} >
+        <TouchableOpacity
+          style={styles.sendButton}
+          onPress={HandleSendPress}
+        >
           <Octicons name="arrow-up" size={18} color="black" />
         </TouchableOpacity>
       </View>
@@ -98,7 +114,6 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
 
-  /* Top */
   topContainer: {
     position: 'absolute',
     top: 16,

@@ -5,6 +5,10 @@ class Settings(BaseSettings):
     VERSION: str
     ENV: str
 
+    QDRANT_URL: str
+    QDRANT_KEY: str
+
+
     class Config:
         env_file = ".env"
 

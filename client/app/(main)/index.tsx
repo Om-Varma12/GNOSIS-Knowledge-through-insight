@@ -1,29 +1,44 @@
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import { useChatStore } from '@/store/chatStore';
-import UserMessage from '@/components/ui/messageStyle/userMessage';
-import AIMessage from '@/components/ui/messageStyle/AIMessage';
+import { View, Text, FlatList, StyleSheet } from "react-native";
+import { useChatStore } from "@/store/chatStore";
+import UserMessage from "@/components/ui/messageStyle/userMessage";
+import AIMessage from "@/components/ui/messageStyle/AIMessage";
 
 export default function ChatContent() {
   const messages = useChatStore((state) => state.messages);
 
-
+  if (messages.length === 0) {
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={styles.welcomeTitle}>
+          Welcome to GNOSIS
+        </Text>
+        <Text style={styles.welcomeSubtitle}>
+          Ask a claim and I’ll analyze its credibility using evidence.
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <FlatList
       data={messages}
       keyExtractor={(item) => item.id}
       contentContainerStyle={styles.list}
-     renderItem={({ item }) =>
-        item.role === 'user' ? (
-          <UserMessage text={item.text} />
-        ) : (
+      showsVerticalScrollIndicator={false}
+      renderItem={({ item }) => {
+        if (item.role === "user") {
+          return <UserMessage text={item.text ?? ""} />;
+        }
+
+        return (
           <AIMessage
-            text={item.text}
-            confidence={0.82}
-            summary="This claim shows multiple red flags based on historical misinformation patterns."
+            text={item.text ?? ""}
+            loading={item.loading}
+            data={item.data}
+            confidence={item.data?.confidence_score}
           />
-        )
-      }
+        );
+      }}
     />
   );
 }
@@ -34,63 +49,25 @@ const styles = StyleSheet.create({
     paddingBottom: 120,
   },
 
- 
-
-  ai: {
-    alignSelf: 'flex-start',
-    backgroundColor: 'transparent',
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 24,
+    backgroundColor: "#000",
   },
 
-  text: {
-    color: '#ffffff',
-    fontSize: 15,
+  welcomeTitle: {
+    color: "#ffffff",
+    fontSize: 22,
+    fontWeight: "600",
+    marginBottom: 8,
+  },
+
+  welcomeSubtitle: {
+    color: "#9ca3af",
+    fontSize: 14,
+    textAlign: "center",
     lineHeight: 20,
-  },
-
-  /* Confidence block */
-  confidenceBlock: {
-    marginTop: 12,
-  },
-
-  confidenceLabel: {
-    color: '#bbbbbb',
-    fontSize: 12,
-    marginBottom: 6,
-  },
-
-  progressTrack: {
-    height: 6,
-    backgroundColor: '#333333',
-    borderRadius: 3,
-    overflow: 'hidden',
-  },
-
-  progressFill: {
-    height: '100%',
-    backgroundColor: '#4ade80',
-  },
-
-  /* Summary */
-  summaryText: {
-    marginTop: 10,
-    color: '#dddddd',
-    fontSize: 13,
-    lineHeight: 18,
-  },
-
-  /* Evidence button */
-  evidenceButton: {
-    marginTop: 12,
-    alignSelf: 'flex-start',
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#444444',
-  },
-
-  evidenceText: {
-    color: '#ffffff',
-    fontSize: 13,
   },
 });

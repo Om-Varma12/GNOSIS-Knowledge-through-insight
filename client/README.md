@@ -1,50 +1,94 @@
-# Welcome to your Expo app 👋
+# GNOSIS Client
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+The **GNOSIS Client** is a mobile application built with **React Native + Expo** that enables users to verify claims, analyze information using AI, and explore supporting evidence across multiple formats. The application communicates with a **FastAPI** backend.
 
-## Get started
+---
 
-1. Install dependencies
+## 🧠 What the App Does
 
-   ```bash
-   npm install
-   ```
+Users can:
 
-2. Start the app
+- Ask factual questions or submit claims  
+- Receive AI-generated analysis  
+- View confidence scores  
+- Explore **text, image, and video** evidence  
+- Track misinformation spread visually  
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## 🧱 Tech Stack
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### Frontend
+- React Native  
+- Expo Router  
+- TypeScript  
+- Zustand (state management)  
+- Axios (API calls)  
+- Expo Vector Icons  
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Backend
+- FastAPI  
 
-## Get a fresh project
+---
 
-When you're ready, run:
+## ✅ Prerequisites
+
+Ensure the following are installed:
+
+- Node.js **18+**
+- npm or yarn
+- Expo CLI
+- Expo Go app (for physical device testing)
+
+Install Expo CLI globally:
 
 ```bash
-npm run reset-project
-```
+npm install -g expo-cli
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
-## Learn more
+Getting Started
+1️⃣ Clone the Repository
+git clone https://github.com/your-org/gnosis-client.git
+cd gnosis-client
 
-To learn more about developing your project with Expo, look at the following resources:
+2️⃣ Install Dependencies
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Using npm:
 
-## Join the community
+npm install
 
-Join our community of developers creating universal apps.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Or using yarn:
+
+yarn install
+
+3️⃣ Configure Backend API
+
+Edit the file:
+
+client/config/constants.ts
+
+export const API_BASE_URL = "http://127.0.0.1:8000";
+export const IMAGE_BASE_PATH = `${API_BASE_URL}/static/images`;
+
+⚠️ Important Notes
+
+Android Emulator
+
+http://10.0.2.2:8000
+
+
+Physical Device (same Wi-Fi network)
+
+http://192.168.1.5:8000
+
+
+Example:
+
+export const API_BASE_URL = "http://192.168.1.5:8000";
+
+4️⃣ Start the App
+npx expo start
+
+
+The Expo developer menu will open.
